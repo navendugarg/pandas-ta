@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import NaN as npNaN
+import numpy as np
 from pandas import DataFrame
 from pandas_ta.momentum import mom
 from pandas_ta.overlap import ema, sma
@@ -121,6 +121,7 @@ def squeeze_pro(high, low, close, bb_length=None, bb_std=None, kc_length=None, k
         neg_dec *= squeeze
         neg_inc *= squeeze
 
+        npNaN
         pos_inc.replace(0, npNaN, inplace=True)
         pos_dec.replace(0, npNaN, inplace=True)
         neg_dec.replace(0, npNaN, inplace=True)

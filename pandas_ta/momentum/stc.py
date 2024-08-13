@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import pandas as pd
+import numpy as np
 from pandas import DataFrame, Series
 from pandas_ta.overlap import ema
 from pandas_ta.utils import get_offset, non_zero_range, verify_series
@@ -152,14 +154,17 @@ def schaff_tc(close, xmacd, tclength, factor):
     xmacd_range = non_zero_range(xmacd.rolling(tclength).max(), lowest_xmacd)
     m = len(xmacd)
 
+    # Initialize stoch1 with NaN or appropriate values
+    stoch1 = pd.Series(np.nan, index=range(len(close)))
+    
     # %Fast K of MACD
     stoch1, pf = list(xmacd), list(xmacd)
     stoch1[0], pf[0] = 0, 0
     for i in range(1, m):
-        if lowest_xmacd[i] > 0:
-            stoch1[i] = 100 * ((xmacd[i] - lowest_xmacd[i]) / xmacd_range[i])
+        if lowest_xmacd.iloc[i] > 0:
+            stoch1.iloc[i] = 100 * ((xmacd.iloc[i] - lowest_xmacd.iloc[i]) / xmacd_range[i])
         else:
-            stoch1[i] = stoch1[i - 1]
+            stoch1.iloc[i] = stoch1.iloc[i - 1]
         # Smoothed Calculation for % Fast D of MACD
         pf[i] = round(pf[i - 1] + (factor * (stoch1[i] - pf[i - 1])), 8)
 
